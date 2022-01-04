@@ -1,7 +1,7 @@
 #pragma once
 #include <SDL.h>
 
-#include "Logger.h"
+#include "../include/Logger.h"
 
 class Renderer {
 private:

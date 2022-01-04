@@ -1,4 +1,4 @@
-#include "Renderer.h"
+#include "../include/Renderer.h"
 
 Renderer::Renderer(SDL_Window* window) {
 	mRenderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);

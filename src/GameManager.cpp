@@ -1,4 +1,4 @@
-#include "GameManager.h"
+#include "../include/GameManager.h"
 
 GameManager::GameManager(int w, int h, std::string title) : mWidth(w), mHeight(h), mTitle(title) {
 
@@ -38,10 +38,19 @@ GameManager::~GameManager() {
 }
 
 void GameManager::Run() {
+	float maxTimeInterval = 1000.0 / mMaxFPS;
+	uint32_t t1, t2 = 0, deltaTime;
+	
 	//GAME LOOP
 	while (!mQuit) {
-		EventHandling();
-		Render();
+		t1 = SDL_GetTicks();
+		deltaTime = t1 - t2;
+		if (deltaTime > maxTimeInterval) {
+			t2 = t1;
+			//std::cout << "FPS: " << 1000.0 / deltaTime << std::endl;
+			EventHandling();
+			Render();
+		}
 	}
 }
 

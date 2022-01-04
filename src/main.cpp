@@ -1,8 +1,8 @@
 #include <SDL.h>
 #include <iostream>
 
-#include "Logger.h"
-#include "GameManager.h"
+#include "../include/Logger.h"
+#include "../include/GameManager.h"
 
 const int SCREEN_WIDTH = 480;
 const int SCREEN_HEIGHT = 640;
