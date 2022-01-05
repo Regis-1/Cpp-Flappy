@@ -1,18 +1,23 @@
 #pragma once
+#include <math.h>
+
+#include "Entity.h"
 
 struct PsychAttrs {
-	float m, g, F, v, a;
+	float v, g;
 };
 
-class Player {
+class Player : public Entity {
 private:
-	float mX, mY;
 	int mSize;
 	PsychAttrs mPsychAttrs;
 	
 public:
 	Player() = delete;
 	Player(const Player& other) = delete;
+	Player(int x, int y, int size, float speed = 10.0f);
+	
+	void Move(uint32_t dt) override;
 
-	Player(float x, float y, int size);
+	int GetSize() { return mSize; }
 };

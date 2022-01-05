@@ -1,7 +1,7 @@
 #include "../include/GameManager.h"
 
 GameManager::GameManager(int w, int h, std::string title) : mWidth(w), mHeight(h), mTitle(title) {
-
+	mPlayer = new Player(240, 320, 30, 18.0f);
 }
 
 bool GameManager::Init() {
@@ -28,6 +28,7 @@ bool GameManager::Init() {
 }
 
 GameManager::~GameManager() {
+	delete mPlayer;
 	delete mRenderer;
 
 	SDL_DestroyWindow(mWindow);
@@ -41,6 +42,10 @@ void GameManager::Run() {
 	float maxTimeInterval = 1000.0 / mMaxFPS;
 	uint32_t t1, t2 = 0, deltaTime;
 	
+	//TODO: change this implicit creation
+	std::vector<Entity*> ents;
+	ents.push_back(mPlayer);
+
 	//GAME LOOP
 	while (!mQuit) {
 		t1 = SDL_GetTicks();
@@ -49,7 +54,8 @@ void GameManager::Run() {
 			t2 = t1;
 			//std::cout << "FPS: " << 1000.0 / deltaTime << std::endl;
 			EventHandling();
-			Render();
+			ProcessLogic(deltaTime);
+			mRenderer->RenderEntities(ents);
 		}
 	}
 }
@@ -63,7 +69,6 @@ void GameManager::EventHandling() {
 	}
 }
 
-void GameManager::Render() {
-	//mRenderer->ClearScreen();
-	mRenderer->UpdateScreen();
+void GameManager::ProcessLogic(uint32_t dt) {
+	mPlayer->Move(dt);
 }

@@ -25,6 +25,17 @@ void Renderer::UpdateScreen() {
 	SDL_RenderPresent(mRenderer);
 }
 
+void Renderer::RenderEntities(std::vector<Entity*> ents) {
+    SDL_RenderClear(mRenderer);
+    SDL_SetRenderDrawColor(mRenderer, 0x00, 0x00, 0x00, 0xff);
+    for (Entity* ent : ents) {
+        if (dynamic_cast<Player*>(ent) != nullptr)
+            DrawPlayer(static_cast<Player*>(ent));
+    }
+    SDL_SetRenderDrawColor(mRenderer, 0xff, 0xff, 0xff, 0xff);
+    SDL_RenderPresent(mRenderer);
+}
+
 //PRIVATE METHODS
 //midpoint circle algorithm (source github)
 void Renderer::DrawCircle(int32_t centreX, int32_t centreY, int32_t radius)
@@ -63,4 +74,9 @@ void Renderer::DrawCircle(int32_t centreX, int32_t centreY, int32_t radius)
             error += (tx - diameter);
         }
     }
+}
+
+void Renderer::DrawPlayer(Player* player) {
+    Position pos = player->GetPos();
+    DrawCircle(pos.x, pos.y, player->GetSize());
 }

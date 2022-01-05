@@ -19,12 +19,14 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="include\Entity.h" />
     <ClInclude Include="include\GameManager.h" />
     <ClInclude Include="include\Logger.h" />
     <ClInclude Include="include\Player.h" />
     <ClInclude Include="include\Renderer.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\Entity.cpp" />
     <ClCompile Include="src\GameManager.cpp" />
     <ClCompile Include="src\Logger.cpp" />
     <ClCompile Include="src\main.cpp" />

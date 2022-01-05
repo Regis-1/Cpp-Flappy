@@ -1,5 +1,11 @@
 #include "../include/Player.h"
 
-Player::Player(float x, float y, int size) : mX(x), mY(y), mSize(size) {
-	mPsychAttrs = { 10.0f, 9.81f, 0.0f, 0.0f, 0.0f };
+Player::Player(int x, int y, int size, float speed) 
+	: Entity(x, y, speed), mSize(size) {
+	
+	mPsychAttrs = { 0.0f, 9.81f };
+}
+
+void Player::Move(uint32_t dt) {
+	mX = mX + (int)floor((dt / 100.0f) * mSpeed);
 }
