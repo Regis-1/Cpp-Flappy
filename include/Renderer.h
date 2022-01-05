@@ -5,6 +5,7 @@
 #include "../include/Logger.h"
 #include "../include/Entity.h"
 #include "../include/Player.h"
+#include "../include/Block.h"
 
 class Renderer {
 private:
@@ -12,6 +13,7 @@ private:
 
 	void DrawCircle(int32_t centreX, int32_t centreY, int32_t radius);
 	void DrawPlayer(Player* player);
+	void DrawGround(Block* ground);
 public:
 	Renderer() {};
 	Renderer(SDL_Window* window);

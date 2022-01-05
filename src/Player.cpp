@@ -7,5 +7,5 @@ Player::Player(int x, int y, int size, float speed)
 }
 
 void Player::Move(uint32_t dt) {
-	mX = mX + (int)floor((dt / 100.0f) * mSpeed);
+	mY = mY + mSpeed;
 }

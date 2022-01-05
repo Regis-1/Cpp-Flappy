@@ -12,6 +12,8 @@ private:
 	int mSize;
 	PsychAttrs mPsychAttrs;
 	
+	bool CheckCollisionGround();
+
 public:
 	Player() = delete;
 	Player(const Player& other) = delete;

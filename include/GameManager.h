@@ -6,10 +6,13 @@
 #include "../include/Logger.h"
 #include "../include/Renderer.h"
 #include "../include/Player.h"
+#include "../include/Block.h"
+
+const int HORIZON_HEIGHT = 40;
 
 class GameManager {
 private:
-	int mWidth, mHeight;
+	int mScrWidth, mScrHeight;
 	std::string mTitle;
 	bool mQuit = false;
 	float mMaxFPS = 60.0f;
@@ -17,6 +20,7 @@ private:
 	SDL_Window* mWindow = nullptr;
 	Renderer* mRenderer = nullptr;
 	Player* mPlayer = nullptr;
+	Block* mGround = nullptr;
 
 	void EventHandling();
 	void ProcessLogic(uint32_t dt);

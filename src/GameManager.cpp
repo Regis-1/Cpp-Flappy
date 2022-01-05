@@ -1,7 +1,8 @@
 #include "../include/GameManager.h"
 
-GameManager::GameManager(int w, int h, std::string title) : mWidth(w), mHeight(h), mTitle(title) {
-	mPlayer = new Player(240, 320, 30, 18.0f);
+GameManager::GameManager(int w, int h, std::string title) : mScrWidth(w), mScrHeight(h), mTitle(title) {
+	mPlayer = new Player(240, 320, 30, 1.0f);
+	mGround = new Block(0, mScrHeight-HORIZON_HEIGHT, mScrWidth, HORIZON_HEIGHT, 0.0f);
 }
 
 bool GameManager::Init() {
@@ -14,7 +15,7 @@ bool GameManager::Init() {
 
 	//Window initialization
 	mWindow = SDL_CreateWindow(mTitle.c_str(), SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED,
-		mWidth, mHeight, SDL_WINDOW_SHOWN);
+		mScrWidth, mScrHeight, SDL_WINDOW_SHOWN);
 	if (mWindow == nullptr) {
 		Logger::Error("Window could not be initialized.");
 		return false;
@@ -30,6 +31,7 @@ bool GameManager::Init() {
 GameManager::~GameManager() {
 	delete mPlayer;
 	delete mRenderer;
+	delete mGround;
 
 	SDL_DestroyWindow(mWindow);
 	mWindow = nullptr;
@@ -45,6 +47,7 @@ void GameManager::Run() {
 	//TODO: change this implicit creation
 	std::vector<Entity*> ents;
 	ents.push_back(mPlayer);
+	ents.push_back(mGround);
 
 	//GAME LOOP
 	while (!mQuit) {

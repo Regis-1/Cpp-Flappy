@@ -28,9 +28,18 @@ void Renderer::UpdateScreen() {
 void Renderer::RenderEntities(std::vector<Entity*> ents) {
     SDL_RenderClear(mRenderer);
     SDL_SetRenderDrawColor(mRenderer, 0x00, 0x00, 0x00, 0xff);
+    bool groundDrawn = false;
     for (Entity* ent : ents) {
         if (dynamic_cast<Player*>(ent) != nullptr)
             DrawPlayer(static_cast<Player*>(ent));
+        else if (dynamic_cast<Block*>(ent) != nullptr) {
+            if (!groundDrawn) {
+                DrawGround(static_cast<Block*>(ent));
+                groundDrawn = true;
+            }
+            else
+                continue;
+        }
     }
     SDL_SetRenderDrawColor(mRenderer, 0xff, 0xff, 0xff, 0xff);
     SDL_RenderPresent(mRenderer);
@@ -79,4 +88,11 @@ void Renderer::DrawCircle(int32_t centreX, int32_t centreY, int32_t radius)
 void Renderer::DrawPlayer(Player* player) {
     Position pos = player->GetPos();
     DrawCircle(pos.x, pos.y, player->GetSize());
+}
+
+void Renderer::DrawGround(Block* ground) {
+    Position pos = ground->GetPos();
+    Dimension dims = ground->GetDimensions();
+    SDL_Rect fillRect = { pos.x, pos.y, dims.w, dims.h };
+    SDL_RenderFillRect(mRenderer, &fillRect);
 }
