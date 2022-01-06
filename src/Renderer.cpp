@@ -26,22 +26,25 @@ void Renderer::UpdateScreen() {
 }
 
 void Renderer::RenderEntities(std::vector<Entity*> ents) {
+    SetRenderColor(mColBackground);
     SDL_RenderClear(mRenderer);
-    SDL_SetRenderDrawColor(mRenderer, 0x00, 0x00, 0x00, 0xff);
     bool groundDrawn = false;
     for (Entity* ent : ents) {
-        if (dynamic_cast<Player*>(ent) != nullptr)
+        if (dynamic_cast<Player*>(ent) != nullptr) {
+            SetRenderColor(mColPlayer);
             DrawPlayer(static_cast<Player*>(ent));
+        }
         else if (dynamic_cast<Block*>(ent) != nullptr) {
             if (!groundDrawn) {
-                DrawGround(static_cast<Block*>(ent));
+                SetRenderColor(mColGround);
+                DrawBlock(static_cast<Block*>(ent));
                 groundDrawn = true;
             }
             else
-                continue;
+                SetRenderColor(mColObstacle);
+                DrawBlock(static_cast<Block*>(ent));
         }
     }
-    SDL_SetRenderDrawColor(mRenderer, 0xff, 0xff, 0xff, 0xff);
     SDL_RenderPresent(mRenderer);
 }
 
@@ -90,9 +93,13 @@ void Renderer::DrawPlayer(Player* player) {
     DrawCircle(pos.x, pos.y, player->GetSize());
 }
 
-void Renderer::DrawGround(Block* ground) {
-    Position pos = ground->GetPos();
-    Dimension dims = ground->GetDimensions();
+void Renderer::DrawBlock(Block* block) {
+    Position pos = block->GetPos();
+    Dimension dims = block->GetDimensions();
     SDL_Rect fillRect = { pos.x, pos.y, dims.w, dims.h };
     SDL_RenderFillRect(mRenderer, &fillRect);
+}
+
+void Renderer::SetRenderColor(ColorAlpha col) {
+    SDL_SetRenderDrawColor(mRenderer, col.r, col.g, col.b, col.a);
 }

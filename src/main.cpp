@@ -1,5 +1,7 @@
 #include <SDL.h>
 #include <iostream>
+#include <stdlib.h>
+#include <time.h>
 
 #include "../include/Logger.h"
 #include "../include/GameManager.h"
@@ -9,6 +11,8 @@ const int SCREEN_HEIGHT = 640;
 
 int main(int argc, char* args[])
 {
+	srand(time(NULL));
+
 	GameManager gameManager(SCREEN_WIDTH, SCREEN_HEIGHT, "FlappyCpp");
 
 	if (!gameManager.Init()) {

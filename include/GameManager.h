@@ -7,6 +7,7 @@
 #include "../include/Renderer.h"
 #include "../include/Player.h"
 #include "../include/Block.h"
+#include "../include/Obstacle.h"
 
 const int HORIZON_HEIGHT = 40;
 
@@ -21,6 +22,7 @@ private:
 	Renderer* mRenderer = nullptr;
 	Player* mPlayer = nullptr;
 	Block* mGround = nullptr;
+	Obstacle* mObstacle = nullptr;
 
 	void EventHandling();
 	void ProcessLogic(uint32_t dt);

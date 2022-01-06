@@ -3,6 +3,7 @@
 GameManager::GameManager(int w, int h, std::string title) : mScrWidth(w), mScrHeight(h), mTitle(title) {
 	mPlayer = new Player(240, 320, 30, 1.0f);
 	mGround = new Block(0, mScrHeight-HORIZON_HEIGHT, mScrWidth, HORIZON_HEIGHT, 0.0f);
+	mObstacle = new Obstacle(415, 150, 50, 3.0f, mScrWidth, mScrHeight, HORIZON_HEIGHT);
 }
 
 bool GameManager::Init() {
@@ -48,6 +49,8 @@ void GameManager::Run() {
 	std::vector<Entity*> ents;
 	ents.push_back(mPlayer);
 	ents.push_back(mGround);
+	ents.push_back(mObstacle->GetBlock(0));
+	ents.push_back(mObstacle->GetBlock(1));
 
 	//GAME LOOP
 	while (!mQuit) {
