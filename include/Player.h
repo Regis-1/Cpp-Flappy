@@ -4,22 +4,21 @@
 #include "Entity.h"
 
 struct PsychAttrs {
-	float v, g;
+	int v0, a;
 };
 
 class Player : public Entity {
 private:
 	int mSize;
 	PsychAttrs mPsychAttrs;
-	
-	bool CheckCollisionGround();
 
 public:
 	Player() = delete;
 	Player(const Player& other) = delete;
-	Player(int x, int y, int size, float speed = 10.0f);
+	Player(int x, int y, int size);
 	
 	void Move(uint32_t dt) override;
 
 	int GetSize() { return mSize; }
+	void SetV0(const int newV0) { mPsychAttrs.v0 = newV0; }
 };

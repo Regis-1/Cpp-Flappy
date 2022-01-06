@@ -1,7 +1,7 @@
 #include "../include/Block.h"
 
-Block::Block(int x, int y, int w, int h, float speed)
-	: Entity(x, y, speed), mWidth(w), mHeight(h) {
+Block::Block(int x, int y, int w, int h, int speed)
+	: Entity(x, y), mWidth(w), mHeight(h), mSpeed(speed) {
 
 }
 

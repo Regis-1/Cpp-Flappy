@@ -17,6 +17,12 @@ private:
 	std::string mTitle;
 	bool mQuit = false;
 	float mMaxFPS = 60.0f;
+	std::vector<Entity*> mEnts;
+
+	//Obstacles parameters
+	int mObsPassage = 150;
+	int mObsWidth = 100;
+	int mObsSpeed = 4;
 
 	SDL_Window* mWindow = nullptr;
 	Renderer* mRenderer = nullptr;
@@ -26,6 +32,7 @@ private:
 
 	void EventHandling();
 	void ProcessLogic(uint32_t dt);
+	void ReplaceObstacle();
 
 public:
 	GameManager(int w, int h, std::string title);
