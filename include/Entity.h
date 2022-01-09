@@ -12,7 +12,7 @@ public:
 	Entity() = delete;
 	Entity(int x, int y);
 
-	virtual void Move(uint32_t dt) {};
+	virtual void Move() {};
 	Position GetPos();
 	void SetPos(const Position pos);
 };

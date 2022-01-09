@@ -11,7 +11,7 @@ const int SCREEN_HEIGHT = 640;
 
 int main(int argc, char* args[])
 {
-	srand(time(NULL));
+	srand((unsigned int)time(NULL));
 
 	GameManager gameManager(SCREEN_WIDTH, SCREEN_HEIGHT, "FlappyCpp");
 

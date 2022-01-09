@@ -6,18 +6,45 @@ Renderer::Renderer(SDL_Window* window) {
 		Logger::Error("Renderer could not be initialized!");
 	else {
 		Logger::Success("Renderer has been initialized.");
+        TTF_Init();
+        mFont = TTF_OpenFont("res/lato.ttf", 32);
+        if (mFont == nullptr)
+            Logger::Error("Font could not be loaded.");
 		SDL_SetRenderDrawColor(mRenderer, 0xff, 0xff, 0xff, 0xff);
 		SDL_RenderClear(mRenderer);
 	}
+
+    //textures loading
+    for (int i = 0; i < TEX_FILES_NUMBER; i++) {
+        mSurface = SDL_LoadBMP(("res/" + texFileNames[i] + ".bmp").c_str());
+        mTextures[i] = SDL_CreateTextureFromSurface(mRenderer, mSurface);
+        if (mTextures[i] == nullptr)
+            Logger::Error(("Unable to create " + texFileNames[i] + " texture"));
+        else
+            Logger::Success(("Texture " + texFileNames[i] + " loaded successfully!"), true);
+        SDL_FreeSurface(mSurface);
+        mSurface = nullptr;
+    }
+
 }
 
 Renderer::~Renderer() {
 	SDL_DestroyRenderer(mRenderer);
+    SDL_FreeSurface(mSurface);
+    SDL_DestroyTexture(mScoreMessage);
+    for (SDL_Texture* tex : mTextures) {
+        SDL_DestroyTexture(tex);
+        tex = nullptr;
+    }
+
 	mRenderer = nullptr;
+    mSurface = nullptr;
+    mScoreMessage = nullptr;
 	Logger::Info("Renderer has been destroyed.");
 }
 
 void Renderer::ClearScreen() {
+    SDL_SetRenderDrawColor(mRenderer, 0xff, 0xff, 0xff, 0xff);
 	SDL_RenderClear(mRenderer);
 }
 
@@ -25,81 +52,43 @@ void Renderer::UpdateScreen() {
 	SDL_RenderPresent(mRenderer);
 }
 
+void Renderer::RenderBackground(int scrWidth, int scrHeight) {
+    SDL_Rect texRect = { 0, 0, scrWidth, scrHeight };
+    SDL_RenderCopy(mRenderer, mTextures[0], NULL, &texRect);
+}
+
 void Renderer::RenderEntities(std::vector<Entity*> ents) {
-    SetRenderColor(mColBackground);
-    SDL_RenderClear(mRenderer);
     bool groundDrawn = false;
-    for (Entity* ent : ents) {
-        if (dynamic_cast<Player*>(ent) != nullptr) {
-            SetRenderColor(mColPlayer);
-            DrawPlayer(static_cast<Player*>(ent));
-        }
-        else if (dynamic_cast<Block*>(ent) != nullptr) {
-            if (!groundDrawn) {
-                SetRenderColor(mColGround);
-                DrawBlock(static_cast<Block*>(ent));
-                groundDrawn = true;
-            }
-            else
-                SetRenderColor(mColObstacle);
-                DrawBlock(static_cast<Block*>(ent));
-        }
+    for (int i = 0; i < ents.size(); i++) {
+        if (dynamic_cast<Player*>(ents[i]) != nullptr)
+            DrawPlayer(static_cast<Player*>(ents[i]));
+        else if (dynamic_cast<Block*>(ents[i]) != nullptr) 
+            DrawBlock(static_cast<Block*>(ents[i]), mTextures[i+1]);
     }
-    SDL_RenderPresent(mRenderer);
+}
+
+void Renderer::RenderText(std::string msg, int x, int y, int w, int h) {
+    SDL_Rect txtRect = { x, y, w, h };
+    mSurface = TTF_RenderText_Solid(mFont, msg.c_str(), mColText);
+    mScoreMessage = SDL_CreateTextureFromSurface(mRenderer, mSurface);
+    SDL_RenderCopy(mRenderer, mScoreMessage, NULL, &txtRect);
+    SDL_FreeSurface(mSurface);
+    SDL_DestroyTexture(mScoreMessage);
+    mSurface = nullptr;
+    mScoreMessage = nullptr;
 }
 
 //PRIVATE METHODS
-//midpoint circle algorithm (source github)
-void Renderer::DrawCircle(int32_t centreX, int32_t centreY, int32_t radius)
-{
-    const int32_t diameter = (radius * 2);
-
-    int32_t x = (radius - 1);
-    int32_t y = 0;
-    int32_t tx = 1;
-    int32_t ty = 1;
-    int32_t error = (tx - diameter);
-
-    while (x >= y)
-    {
-        //  Each of the following renders an octant of the circle
-        SDL_RenderDrawPoint(mRenderer, centreX + x, centreY - y);
-        SDL_RenderDrawPoint(mRenderer, centreX + x, centreY + y);
-        SDL_RenderDrawPoint(mRenderer, centreX - x, centreY - y);
-        SDL_RenderDrawPoint(mRenderer, centreX - x, centreY + y);
-        SDL_RenderDrawPoint(mRenderer, centreX + y, centreY - x);
-        SDL_RenderDrawPoint(mRenderer, centreX + y, centreY + x);
-        SDL_RenderDrawPoint(mRenderer, centreX - y, centreY - x);
-        SDL_RenderDrawPoint(mRenderer, centreX - y, centreY + x);
-
-        if (error <= 0)
-        {
-            ++y;
-            error += ty;
-            ty += 2;
-        }
-
-        if (error > 0)
-        {
-            --x;
-            tx += 2;
-            error += (tx - diameter);
-        }
-    }
-}
-
 void Renderer::DrawPlayer(Player* player) {
     Position pos = player->GetPos();
-    DrawCircle(pos.x, pos.y, player->GetSize());
+    int size = player->GetSize();
+    SDL_Rect texRect = { pos.x - size, pos.y - size, size * 2, size * 2 };
+    SDL_RenderCopy(mRenderer, mTextures[1], NULL, &texRect);
 }
 
-void Renderer::DrawBlock(Block* block) {
+void Renderer::DrawBlock(Block* block, SDL_Texture* tex) {
     Position pos = block->GetPos();
     Dimension dims = block->GetDimensions();
-    SDL_Rect fillRect = { pos.x, pos.y, dims.w, dims.h };
-    SDL_RenderFillRect(mRenderer, &fillRect);
-}
-
-void Renderer::SetRenderColor(ColorAlpha col) {
-    SDL_SetRenderDrawColor(mRenderer, col.r, col.g, col.b, col.a);
+    SDL_Rect texRect = { pos.x, pos.y, dims.w, dims.h };
+    SDL_RenderCopy(mRenderer, tex, NULL, &texRect);
 }

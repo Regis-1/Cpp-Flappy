@@ -11,13 +11,23 @@
 
 const int HORIZON_HEIGHT = 40;
 
+enum GameState {
+	QUIT,
+	RUNNING,
+	PAUSE,
+	END
+};
+
 class GameManager {
 private:
 	int mScrWidth, mScrHeight;
 	std::string mTitle;
-	bool mQuit = false;
+	GameState mGameState;
 	float mMaxFPS = 60.0f;
 	std::vector<Entity*> mEnts;
+	int mScore = 0;
+
+	bool mChecker[2] = { false, false };
 
 	//Obstacles parameters
 	int mObsPassage = 150;
@@ -31,8 +41,14 @@ private:
 	Obstacle* mObstacle = nullptr;
 
 	void EventHandling();
-	void ProcessLogic(uint32_t dt);
+	void InitializeObjects();
+	void ProcessMove();
+	void ProcessCollisions();
+	void ProcessScore();
 	void ReplaceObstacle();
+	void Retry();
+	bool IsBetween(int x, int a, int b);
+	bool IsPlayerCollision();
 
 public:
 	GameManager(int w, int h, std::string title);

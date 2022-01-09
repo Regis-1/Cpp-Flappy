@@ -5,6 +5,6 @@ Block::Block(int x, int y, int w, int h, int speed)
 
 }
 
-void Block::Move(uint32_t dt) {
+void Block::Move() {
 	mX = mX - mSpeed;
 }

@@ -17,7 +17,7 @@ public:
 	Player(const Player& other) = delete;
 	Player(int x, int y, int size);
 	
-	void Move(uint32_t dt) override;
+	void Move() override;
 
 	int GetSize() { return mSize; }
 	void SetV0(const int newV0) { mPsychAttrs.v0 = newV0; }

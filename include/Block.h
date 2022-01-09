@@ -13,6 +13,6 @@ public:
 	Block() = delete;
 	Block(int x, int y, int w, int h, int speed);
 
-	void Move(uint32_t dt);
+	void Move();
 	Dimension GetDimensions() { return { mWidth, mHeight }; }
 };
